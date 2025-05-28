@@ -78,7 +78,7 @@
     }
 
     .cvv-container img {
-      width: 40px;
+      width: 60px;
       height: auto;
     }
   </style>
@@ -100,6 +100,8 @@
         <option value="visa">Visa</option>
         <option value="mastercard">MasterCard</option>
         <option value="amex">American Express</option>
+        <option value="disc">Discover</option>
+        <option value="diners">Diners Club</option>
       </select>
 
       <label for="exp">Fecha de vencimiento</label>
@@ -112,7 +114,7 @@
       </div>
 
       <label for="direccion">Dirección de la tarjeta</label>
-      <input type="text" id="direccion" name="direccion" placeholder="Calle 1 Av 2" required>
+      <input type="text" id="direccion" name="direccion" placeholder="Ej. Calle 1 Av 2" required>
 
       <button type="submit">Asociar tarjeta</button>
     </form>
